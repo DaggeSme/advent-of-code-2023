@@ -23,38 +23,35 @@ def checksSymbol(item):
 
 def checkGrid(rows, columns):
     """check row before item"""
-    result = 1
     foundNumbers = 0
-    rows1 = 0
-    columns1 = 0
-    rows2 = 0
-    columns2 = 0
+    returnList = [1]
     try:
         if checkNumber(list[rows - 1][columns - 1]) == 1:
-            rows1 = rows - 1
-            columns1 = columns - 1
+            returnList.append(rows - 1)
+            returnList.append(columns - 1)
             foundNumbers = 1
     except Exception:
         pass
     try:
         if checkNumber(list[rows -1][columns]) == 1:
-            if checkNumber(list[rows - 1][columns - 1]) == 0:
-                rows1 = rows - 1
-                columns1 = columns
+            if checkNumber(list[rows - 1][columns - 1]) == None:
+                returnList.append(rows - 1)
+                returnList.append(columns)
                 foundNumbers = 1
     except Exception:
         pass
     try:
         if checkNumber(list[rows - 1][columns + 1]) == 1:
-            if checkNumber(list[rows -1][columns]) == 0:
+            if checkNumber(list[rows -1][columns]) == None:
                 if foundNumbers == 0:
-                    rows1 = rows - 1
-                    columns1 = columns + 1
+                    returnList.append(rows - 1)
+                    returnList.append(columns + 1)
                     foundNumbers = 1
+                    
                 else:
-                    rows2 = rows - 1
-                    columns2 = columns + 1
-                    return result, rows1, columns1, rows2, columns2
+                    returnList.append(rows - 1)
+                    returnList.append(columns + 1)
+                    return returnList
     except Exception:
         pass
 
@@ -62,25 +59,25 @@ def checkGrid(rows, columns):
     try:
         if checkNumber(list[rows][columns - 1]) == 1:
             if foundNumbers == 0:
-                rows1 = rows
-                columns1 = columns - 1
+                returnList.append(rows)
+                returnList.append(columns - 1)
                 foundNumbers = 1
             else:
-                rows2 = rows
-                columns2 = columns - 1
-                return result, rows1, columns1, rows2, columns2
+                returnList.append(rows)
+                returnList.append(columns - 1)
+                return returnList
     except Exception:
         pass
     try:
         if checkNumber(list[rows][columns + 1]) == 1:
             if foundNumbers == 0:
-                rows1 = rows
-                columns1 = columns + 1
+                returnList.append(rows)
+                returnList.append(columns + 1)
                 foundNumbers = 1
             else:
-                rows2 = rows
-                columns2 = columns + 1
-                return result, rows1, columns1, rows2, columns2
+                returnList.append(rows)
+                returnList.append(columns + 1)
+                return returnList
     except Exception:
         pass
 
@@ -88,39 +85,39 @@ def checkGrid(rows, columns):
     try:
         if checkNumber(list[rows + 1][columns - 1]) == 1:
             if foundNumbers == 0:
-                rows1 = rows + 1
-                columns1 = columns - 1
+                returnList.append(rows + 1)
+                returnList.append(columns - 1)
                 foundNumbers = 1
             else:
-                rows2 = rows + 1
-                columns2 = columns - 1
-                return result, rows1, columns1, rows2, columns2
+                returnList.append(rows + 1)
+                returnList.append(columns - 1)
+                return returnList
     except Exception:
         pass
     try:
         if checkNumber(list[rows + 1][columns]) == 1:
-            if checkNumber(list[rows + 1][columns - 1]) == 0:
+            if checkNumber(list[rows + 1][columns - 1]) == None:
                 if foundNumbers == 0:
-                    rows1 = rows + 1
-                    columns1 = columns
+                    returnList.append(rows + 1)
+                    returnList.append(columns)
                     foundNumbers = 1
                 else:
-                    rows2 = rows + 1
-                    columns2 = columns
-                    return result, rows1, columns1, rows2, columns2
+                    returnList.append(rows + 1)
+                    returnList.append(columns)
+                    return returnList
     except Exception:
         pass
     try:
         if checkNumber(list[rows + 1][columns + 1]) == 1:
-            if checkNumber(list[rows + 1][columns]) == 0:
+            if checkNumber(list[rows + 1][columns]) == None:
                 if foundNumbers == 0:
-                    rows1 = rows + 1
-                    columns1 = columns + 1
+                    returnList.append(rows + 1)
+                    returnList.append(columns + 1)
                     foundNumbers = 1
                 else:
-                    rows2 = rows + 1
-                    columns2 = columns + 1
-                    return result, rows1, columns1, rows2, columns2
+                    returnList.append(rows + 1)
+                    returnList.append(columns + 1)
+                    return returnList
     except Exception:
         pass
     return
@@ -143,7 +140,8 @@ columns = 0
 
 tempRows = 0
 tempColumns = 0
-tempNumberString = ""
+tempNumberString1 = ""
+tempNumberString2 = ""
 
 sum = 0
 
@@ -151,10 +149,61 @@ sum = 0
 for lines in list:
     while columns < len(list[rows]):
         if checkStar(list[rows][columns]) == 1:
-            print(checkGrid(rows, columns))
-            if checkGrid(rows, columns) == 1:
-                print(list[rows][columns])
+            tempList = checkGrid(rows, columns)
+            if tempList != None:
+                """Check numbers fist numbers"""
+                tempColumns = tempList[2]
+                tempRows = tempList[1]
+                countDown = 1
+                tempNumberString1 = ""
+                while countDown == 1:
+                    tempColumns = tempColumns - 1
+                    if checkNumber(list[tempRows][tempColumns]) == None:
+                        tempColumns = tempColumns + 1
+                        countDown = 0
+                tempNumberString1 = tempNumberString1 + list[tempRows][tempColumns]
+                countUp = 1
+                while countUp == 1:
+                    tempColumns = tempColumns + 1
+                    try:
+                        if checkNumber(list[tempRows][tempColumns]) == None:
+                            tempColumns = tempColumns - 1
+                            countUp = 0
+                            break
+                    except:
+                        tempColumns = tempColumns - 1
+                        countUp = 0
+                        break
+                    tempNumberString1 = tempNumberString1 + list[tempRows][tempColumns]
+                """end check numbers"""
+                """Check numbers second numbers"""
+                tempColumns = tempList[4]
+                tempRows = tempList[3]
+                countDown = 1
+                tempNumberString2 = ""
+                while countDown == 1:
+                    tempColumns = tempColumns - 1
+                    if checkNumber(list[tempRows][tempColumns]) == None:
+                        tempColumns = tempColumns + 1
+                        countDown = 0
+                tempNumberString2 = tempNumberString2 + list[tempRows][tempColumns]
+                countUp = 1
+                while countUp == 1:
+                    tempColumns = tempColumns + 1
+                    try:
+                        if checkNumber(list[tempRows][tempColumns]) == None:
+                            tempColumns = tempColumns - 1
+                            countUp = 0
+                            break
+                    except:
+                        tempColumns = tempColumns - 1
+                        countUp = 0
+                        break
+                    tempNumberString2 = tempNumberString2 + list[tempRows][tempColumns]
+                """end check numbers"""
+                sum = sum + (int(tempNumberString1) * int(tempNumberString2))
         columns = columns + 1
     rows = rows + 1
     columns = 0
+print(sum)
     
